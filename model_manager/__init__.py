@@ -78,10 +78,12 @@ class SqlAlchemyModelManager(ModelManager):
     @classmethod
     def delete(cls, id):
         # first make sure it exists, before we delete it
-        if not isinstance(id, cls.__model__):
-            cls.get(id)
+        if isinstance(id, cls.__model__):
+            obj = id
+        else:
+            obj = cls.get(id)
 
-        cls.__model__.query.filter(cls.__model__.id == id).delete()
+        cls.__model__.query.filter(cls.__model__.id == obj.id).delete()
 
     @classmethod
     def update(cls, id, d):
